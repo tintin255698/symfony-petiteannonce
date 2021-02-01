@@ -1,0 +1,33 @@
+{% extends 'users.html.twig' %}
+
+{% block title %}Hello UsersController!{% endblock %}
+
+{% block body %}
+
+    {% for message in app.flashes('message') %}
+        <div class="p-3 my-2 rounded-2 primary">{{ message }}</div>
+    {% endfor %}
+
+
+    <div class="grix xs4 container">
+        <div class="col-xs4"><h1>Profil de {{ app.user.name }} {{ app.user.firstname }}</h1></div>
+        <div class="col-xs3">Nom</div>
+        <div class="col-xs1">{{ app.user.name }}</div>
+        <div class="col-xs3">Prenom</div>
+        <div class="col-xs1">{{ app.user.firstname }}</div>
+        <div class="col-xs3">Email</div>
+        <div class="col-xs1">{{ app.user.email }}</div>
+        <div class="col-xs4">
+            <a href="{{ path('users_profil_edit', {'id': app.user.id} ) }}" class="col-lg6 btn shadow-1 rounded-1 blue">Modifier le profil</a>
+            <a href="#" class="col xs6 btn shadow-1 rounded-1 blue">Modifier le mot de passe</a>
+        </div>
+    </div>
+    <div class="col-xs12"><h1>Annonces de {{ app.user.name }} {{ app.user.firstname }} ({{ app.user.annonces|length }})</h1></div>
+    {% for annonce in app.user.annonces %}
+    <div class="col-xs6">Titre</div>
+    <div class="col-xs6" >{{ annonce.title }}</div>
+    {% endfor %}
+
+
+
+{% endblock %}

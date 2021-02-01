@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MainController!{% endblock %}
+
+{% block body %}
+
+    {% if annonce|length <= 0 %}
+
+    <p>Il n'y a pas d'annonces</p>
+
+    {% else %}
+    {% for annonces in annonce %}
+    <div class="card shadow-1 fx-row">
+        <div class="primary d-flex vcenter fx-center">
+            <img src="{{ asset('/uploads/' ~ annonces.images[0].name)|imagine_filter('square')}} ">
+        </div>
+        <div class="flex fx-col fx-grow">
+            <div class="card-content">
+                <p>{{ annonces.categories.name }}</p>
+                <p>{{ annonces.content|striptags|u.truncate(4, '...') }}</p>
+            </div>
+            <div>
+                {% if is_granted("ROLE_USER") %}
+                    {%  for favoris in annonces.favoris %}
+                        {% if app.user.id == favoris.id %}
+                            <i class='bx txt-red bxs-heart' data-id="{{ annonces.id }}"></i>
+                        {% else %}
+                            <i class='bx txt-red bx-heart' data-id="{{ annonces.id }}" ></i>
+                        {% endif %}
+                    {% else %}
+                        <i class='bx txt-red bx-heart' data-id="{{ annonces.id }}" ></i>
+                    {% endfor %}
+                {% else %}
+                    <i class='bx txt-red bx-heart' ></i>
+                {% endif %}
+            </div>
+
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+{% endblock %}
+
+  {% block javascripts %}
+      <script>
+          window.onload = function(){
+              let activer = document.querySelectorAll('.bx-heart');
+              for(let bouton of activer){
+                  bouton.addEventListener("click", function() {
+                      let xmlhttp = new XMLHttpRequest();
+                      xmlhttp.open("get", `/annonce/favoris/add/${this.dataset.id}`)
+                      xmlhttp.send()
+                      document.location.reload();
+                  })
+              }
+              let arreter = document.querySelectorAll('.bxs-heart');
+              for(let bouton of arreter){
+                  bouton.addEventListener("click", function() {
+                      let xmlhttp = new XMLHttpRequest();
+                      xmlhttp.open("get", `/annonce/favoris/delete/${this.dataset.id}`)
+                      xmlhttp.send()
+                      document.location.reload();
+                  })
+              }
+          }
+      </script>
+  {% endblock %}

@@ -1,0 +1,12 @@
+fm_elfinder:
+    instances:
+        default:
+            locale: FR
+            editor: ckeditor
+            theme: smoothness
+            connector:
+                roots:
+                    uploads:
+                        driver: LocalFileSystem
+                        path: uploads/images
+                        show_hidden: false

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello MainController!{% endblock %}
+
+{% block body %}
+
+    <div class="caroulix" id="second-caroulix" data-ax="caroulix" data-caroulix-indicators-enabled="true" data-caroulix-indicators-is-flat="true">
+        {%  for images in detail.images %}
+        <div class="caroulix-item">
+            <img src="{{ asset('/uploads/' ~ images.name)|imagine_filter('banniere') }}" alt="{{ detail.title }}">
+        </div>
+        {% endfor %}
+    </div>
+
+    <button onclick="Axentix.getInstance('#second-caroulix').prev()" class="btn primary rounded-1 shadow-1">PREV</button>
+    <button onclick="Axentix.getInstance('#second-caroulix').next()" class="btn primary rounded-1 shadow-1">NEXT</button>
+
+        <div class="card shadow-1 fx-row">
+            <div class="flex fx-col fx-grow">
+                <div class="card-header">{{ detail.title }}</div>
+                <div class="card-content">
+                    <p>{{ detail.categories.name }}</p>
+                    <p>{{ detail.content|raw}}</p>
+                </div>
+
+            </div>
+        </div>
+{% endblock %}

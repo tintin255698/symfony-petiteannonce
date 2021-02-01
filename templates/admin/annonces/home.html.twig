@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gerer les categories{% endblock %}
+
+{% block body %}
+    <h1>Gerer les annonces</h1>
+
+    <div class="responsive-table-2">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Contenu</th>
+                <th>Date de creation</th>
+                <th>Active</th>
+                <th>Supprimer</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for annonces in annonce %}
+                <tr>
+                    <td>{{ annonces.id }}</td>
+                    <td>{{ annonces.title }}</td>
+                    <td>{{ annonces.content }}</td>
+                    <td>{{ annonces.createdAt|date }}</td>
+                    <td>
+                        <label class="form-switch mt-2">
+                            <input type="checkbox" class="fruit-chexkbox" {% if annonces.active == 1 %} checked {% endif%} data-id="{{ annonces.id }}" />
+                            <span class="slider"></span>
+                        </label>
+                    </td>
+                    <td>
+                    <a href="#" class="btn rounded-1 primary press modal-trigger" data-id="{{ annonces.id }}" data-titre="{{ annonces.title }}" data-target="modal-delete">Supprimer</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="modal shadow-1 white falling" id="modal-delete" data-ax="modal">
+        <div class="modal-header">Supprimer une annonce</div>
+
+        <div class="divider"></div>
+
+        <div class="modal-content"></div>
+
+        <div class="divider"></div>
+
+        <div class="modal-footer">
+            <a href="" class="btn red">Valider</a>
+            <button data-target="modal-delete" class="ml-auto btn shadow-1 rounded-1 small primary modal-trigger">Annuler</button>
+        </div>
+    </div>
+
+    {% block javascripts %}
+        <script>
+            window.onload = function(){
+                let activer = document.querySelectorAll("[type=checkbox]")
+                for(let bouton of activer){
+                    bouton.addEventListener("click", function() {
+                        let xmlhttp = new XMLHttpRequest();
+                        xmlhttp.open("get", `/admin/annonces/activer/${this.dataset.id}`)
+                        xmlhttp.send()
+                    })
+                }
+                let supprimer = document.querySelectorAll(".modal-trigger")
+                for(let bouton of supprimer){
+                    bouton.addEventListener("click", function() {
+                        document.querySelector(".modal-footer a").href = `/admin/annonces/delete/${this.dataset.id}`
+                        document.querySelector(".modal-content").innerHTML =`Etes-vous sur de vouloir supprimer l'annonce ${this.dataset.titre}`
+                    })
+                }
+            };
+        </script>
+    {% endblock %}
+
+{% endblock %}
+
+
