@@ -4,6 +4,9 @@
 
 {% block body %}
 
+    <a href="{{ path('contact') }}" >Nous contacter</a>
+
+
     {% if annonce|length <= 0 %}
 
     <p>Il n'y a pas d'annonces</p>
@@ -16,7 +19,7 @@
         </div>
         <div class="flex fx-col fx-grow">
             <div class="card-content">
-                <p>{{ annonces.categories.name }}</p>
+                <a href="{{ path('annonce_detail', {slug : annonces.slug}) }}"><p>{{ annonces.categories.name }}</p></a>
                 <p>{{ annonces.content|striptags|u.truncate(4, '...') }}</p>
             </div>
             <div>

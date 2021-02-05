@@ -4,6 +4,16 @@
 
 {% block body %}
 
+
+
+    <div class="container">
+
+        {% for messages in app.flashes('message') %}
+            <div class="p-3 my-2 rounded-2 success {{ messages }}"></div>
+        {% endfor %}
+
+
+
     <div class="caroulix" id="second-caroulix" data-ax="caroulix" data-caroulix-indicators-enabled="true" data-caroulix-indicators-is-flat="true">
         {%  for images in detail.images %}
         <div class="caroulix-item">
@@ -21,8 +31,44 @@
                 <div class="card-content">
                     <p>{{ detail.categories.name }}</p>
                     <p>{{ detail.content|raw}}</p>
+                    <p> <button class="btn rounded-1 primary press modal-trigger" data-target="modal-contact">Contacter l'annonceur</button></p>
                 </div>
 
             </div>
         </div>
+
+
+    <div class="modal shadow-1 white falling" id="modal-contact" data-ax="modal">
+        <div class="modal-header">Contacter l'annoncer</div>
+
+        <div class="divider"></div>
+{{ form_start(form) }}
+        <div class="modal-content"></div>
+{{ form_widget(form.title) }}
+{{ form_row(form.email) }}
+{{ form_row(form.message) }}
+        <div class="divider"></div>
+
+        <div class="modal-footer">
+            <button class="btn small primary">Envoyer</button>
+            <button data-target="modal-contact" class="ml-auto btn shadow-1 rounded-1 small secondary modal-trigger">Fermer</button>
+        </div>
+    </div>
+{{ form_end(form) }}
+
+
+    </div>
+{% block javascripts %}
+    <script>
+    window.onload = function(){
+        document.querySelector("#annonces_contact_title").value = "{{ detail.title|raw }}"
+        }
+    </script>
+
+
 {% endblock %}
+
+
+
+{% endblock %}
+
