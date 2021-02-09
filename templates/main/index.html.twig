@@ -6,6 +6,7 @@
 
     <a href="{{ path('contact') }}" >Nous contacter</a>
 
+    {{ form(form) }}
 
     {% if annonce|length <= 0 %}
 
@@ -13,6 +14,7 @@
 
     {% else %}
     {% for annonces in annonce %}
+
     <div class="card shadow-1 fx-row">
         <div class="primary d-flex vcenter fx-center">
             <img src="{{ asset('/uploads/' ~ annonces.images[0].name)|imagine_filter('square')}} ">
@@ -20,7 +22,7 @@
         <div class="flex fx-col fx-grow">
             <div class="card-content">
                 <a href="{{ path('annonce_detail', {slug : annonces.slug}) }}"><p>{{ annonces.categories.name }}</p></a>
-                <p>{{ annonces.content|striptags|u.truncate(4, '...') }}</p>
+                <p>{{ annonces.content|striptags }}</p>
             </div>
             <div>
                 {% if is_granted("ROLE_USER") %}

@@ -19,22 +19,28 @@ class AnnoncesRepository extends ServiceEntityRepository
         parent::__construct($registry, Annonces::class);
     }
 
-    // /**
-    //  * @return Annonces[] Returns an array of Annonces objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+    /**
+     * Recherche les annonces en fonction du formulaire
+     * @return void
+     */
+    public function search($mots = null, $categories = null){
+        $query = $this->createQueryBuilder('a');
+        $query->where('a.active = 1');
+        if($mots != null){
+            $query->andWhere('MATCH_AGAINST(a.title, a.content) AGAINST (:mots boolean)>0')
+                ->setParameter('mots', $mots);
+        }
+        if($categories != null){
+            $query->join('a.categories', 'c');
+            $query->andWhere('c.id = :id');
+            $query->setParameter('id', $categories );
+        }
+
+
+
+        return $query->getQuery()->getResult();
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Annonces
